@@ -21,8 +21,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ArrowPadExample extends StatelessWidget {
+class ArrowPadExample extends StatefulWidget {
   const ArrowPadExample({Key? key}) : super(key: key);
+
+  @override
+  _ArrowPadExampleState createState() => _ArrowPadExampleState();
+}
+
+class _ArrowPadExampleState extends State<ArrowPadExample> {
+  String _secondArrowPadValue = 'With Functions';
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +45,78 @@ class ArrowPadExample extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ArrowPad(
-              padding: const EdgeInsets.all(8.0),
-              height: height / 4,
-              width: width / 4,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ArrowPad(
+                  height: height / 5,
+                  width: width / 5,
+                ),
+                const Text('Default Arrow Pad'),
+              ],
             ),
-            ArrowPad(
-              padding: const EdgeInsets.all(8.0),
-              height: height / 4,
-              width: width / 4,
-              arrowPadIconStyle: ArrowPadIconStyle.arrow,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ArrowPad(
+                  padding: const EdgeInsets.all(8.0),
+                  height: height / 5,
+                  width: width / 5,
+                  iconColor: Colors.white,
+                  innerColor: Colors.red,
+                  outerColor: const Color(0xFFCC0000),
+                  splashColor: const Color(0xFFCC0000),
+                  hoverColor: const Color(0xFFFF4D4D),
+                  onPressedUp: () {
+                    setState(() {
+                      _secondArrowPadValue = 'Up Pressed';
+                    });
+                  },
+                  onPressedDown: () {
+                    setState(() {
+                      _secondArrowPadValue = 'Down Pressed';
+                    });
+                  },
+                  onPressedLeft: () {
+                    setState(() {
+                      _secondArrowPadValue = 'Left Pressed';
+                    });
+                  },
+                  onPressedRight: () {
+                    setState(() {
+                      _secondArrowPadValue = 'Right Pressed';
+                    });
+                  },
+                ),
+                Text(_secondArrowPadValue),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ArrowPad(
+                  padding: const EdgeInsets.all(8.0),
+                  height: height / 5,
+                  width: width / 5,
+                  arrowPadIconStyle: ArrowPadIconStyle.arrow,
+                  hoverColor: Colors.green,
+                  iconColor: const Color(0xFF631739),
+                  outerColor: const Color(0xFF86FC8A),
+                ),
+                const Text('Without Functions'),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ArrowPad(
+                  height: height / 7,
+                  width: width / 7,
+                  innerColor: Colors.blue,
+                  arrowPadIconStyle: ArrowPadIconStyle.arrow,
+                ),
+                const Text('Small Size'),
+              ],
             ),
           ],
         ),

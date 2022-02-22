@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// icon styles of the arrow pad
 enum ArrowPadIconStyle {
   /// the default arrow pad icon style
   ///
@@ -20,9 +21,31 @@ enum ArrowPadIconStyle {
 }
 
 class ArrowPad extends StatelessWidget {
-  /// rounded widget with 4 arrow keys
+  /// creates a rounded widget with 4 arrow keys
   ///
-  /// [height] and [width] determines the size of the widget.
+  /// required [height] and [width] determines the size of the widget.
+  /// Better to use it with min size of 55.0
+  ///
+  /// use [onPressedUp], [onPressedLeft], [onPressedRight], [onPressedDown]
+  /// to declare functions on pressed arrows
+  ///
+  /// [ArrowPadIconStyle] determines the style of the arrow keys
+  ///
+  /// There are different customization options available like [innerColor],
+  /// [outerColor], etc.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// ArrowPad(
+  ///   height: 70,
+  ///   width: 70,
+  ///   arrowPadIconStyle = ArrowPadIconStyle.arrow,
+  ///   onPressedUp: () => print('up'),
+  ///   onPressedLeft: () => print('left'),
+  ///   onPressedRight: () => print('right'),
+  ///   onPressedDown: () => print('down'),
+  /// ),
+  /// ```
   const ArrowPad({
     Key? key,
     required this.height,
@@ -35,7 +58,9 @@ class ArrowPad extends StatelessWidget {
     this.outerColor = const Color(0xFFE0E0E0),
     this.innerColor,
     this.iconColor,
-    this.padding = EdgeInsets.zero,
+    this.splashColor,
+    this.hoverColor,
+    this.padding,
   }) : super(key: key);
 
   final double height;
@@ -48,7 +73,9 @@ class ArrowPad extends StatelessWidget {
   final Color? outerColor;
   final Color? innerColor;
   final Color? iconColor;
-  final EdgeInsetsGeometry padding;
+  final Color? splashColor;
+  final Color? hoverColor;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +84,7 @@ class ArrowPad extends StatelessWidget {
     List<IconData> _icons = _getIconsFromIconStyle(arrowPadIconStyle);
 
     return Padding(
-      padding: padding,
+      padding: padding ?? EdgeInsets.zero,
       child: Container(
         height: height,
         width: width,
@@ -82,6 +109,8 @@ class ArrowPad extends StatelessWidget {
                       borderRadius: BorderRadius.circular(_padSize),
                     ),
                     child: InkWell(
+                      splashColor: splashColor,
+                      hoverColor: hoverColor,
                       borderRadius: BorderRadius.circular(_padSize - 10),
                       onTap: () {},
                       onTapDown: (details) {
@@ -91,50 +120,66 @@ class ArrowPad extends StatelessWidget {
                         if (x > part && x < part * 2) {
                           // up or down
                           if (y < part) {
-                            onPressedUp!();
+                            if (onPressedUp != null) {
+                              onPressedUp!();
+                            }
                           } else if (y > part * 2) {
-                            onPressedDown!();
+                            if (onPressedDown != null) {
+                              onPressedDown!();
+                            }
                           }
                         } else if (y > part && y < part * 2) {
                           // left or right
                           if (x < part) {
-                            onPressedLeft!();
+                            if (onPressedLeft != null) {
+                              onPressedLeft!();
+                            }
                           } else if (x > part * 2) {
-                            onPressedRight!();
+                            if (onPressedRight != null) {
+                              onPressedRight!();
+                            }
                           }
                         }
                       },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(
-                            _icons[0],
-                            size: _padSize / 4,
-                            color: iconColor,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                _icons[1],
-                                size: _padSize / 4,
-                                color: iconColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Icon(
+                              _icons[0],
+                              size: _padSize / 5,
+                              color: iconColor,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    _icons[1],
+                                    size: _padSize / 5,
+                                    color: iconColor,
+                                  ),
+                                  Icon(
+                                    _icons[2],
+                                    size: _padSize / 5,
+                                    color: iconColor,
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                _icons[2],
-                                size: _padSize / 4,
-                                color: iconColor,
-                              ),
-                            ],
-                          ),
-                          Icon(
-                            _icons[3],
-                            size: _padSize / 4,
-                            color: iconColor,
-                          ),
-                        ],
+                            ),
+                            Icon(
+                              _icons[3],
+                              size: _padSize / 5,
+                              color: iconColor,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
