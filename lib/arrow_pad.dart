@@ -20,6 +20,7 @@ enum ArrowPadIconStyle {
   arrow,
 }
 
+/// the arrow pad widget
 class ArrowPad extends StatelessWidget {
   /// creates a rounded widget with 4 arrow keys
   ///
@@ -58,18 +59,48 @@ class ArrowPad extends StatelessWidget {
   /// ```
   const ArrowPad({
     Key? key,
+
+    /// height of the widget
     this.height,
+
+    /// width of the widget
     this.width,
+
+    /// function when up arrow is pressed
     this.onPressedUp,
+
+    /// function when down arrow is pressed
     this.onPressedDown,
+
+    /// function when left arrow is pressed
     this.onPressedLeft,
+
+    /// function when right arrow is pressed
     this.onPressedRight,
+
+    /// Icon style of the arrow pad [ArrowPadIconStyle]
+    ///
+    /// Defaults to [ArrowPadIconStyle.chevron]
     this.arrowPadIconStyle = ArrowPadIconStyle.chevron,
+
+    /// outer circle color of the arrow pad
+    ///
+    /// Defaults to `Color(0xFFE0E0E0)`
     this.outerColor = const Color(0xFFE0E0E0),
+
+    /// inner circle color of the arrow pad
     this.innerColor,
+
+    /// icon color of the arrow pad
     this.iconColor,
+
+    /// splash color of the inner circle arrow pad
     this.splashColor,
+
+    /// hover color of the inner circle arrow pad
     this.hoverColor,
+
+    /// The amount of space by which to inset the child.
     this.padding,
   }) : super(key: key);
 

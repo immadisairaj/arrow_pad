@@ -42,6 +42,10 @@ ArrowPad(
     width: 80.0,
     innerColor: Colors.blue,
     arrowPadIconStyle: ArrowPadIconStyle.arrow,
+    onPressedUp: () => print('up'),
+    onPressedLeft: () => print('left'),
+    onPressedRight: () => print('right'),
+    onPressedDown: () => print('down'),
 ),
 ```
 ![Screenshot 3](https://user-images.githubusercontent.com/40348358/155263058-8b760258-b7a4-4bc0-976e-b4d02f7b0120.png)
