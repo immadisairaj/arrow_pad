@@ -54,7 +54,7 @@ You can find more usage details in the [`/example`](https://github.com/immadisai
 contribute to the package, how to file issues, what response they can expect 
 from the package authors, and more. -->
 
-This package is licensed under [MIT License](https://github.com/immadisairaj/arrow_pad/blob/main/LICENSE)
+This package is licensed under [BSD 3-Clause License](https://github.com/immadisairaj/arrow_pad/blob/main/LICENSE)
 
 <!-- 
 This README describes the package. If you publish this package to pub.dev,
