@@ -47,12 +47,9 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ArrowPad(
-                  height: height / 5,
-                  width: width / 5,
-                ),
-                const Text('Default Arrow Pad'),
+              children: const [
+                ArrowPad(),
+                Text('Default Arrow Pad'),
               ],
             ),
             Row(
@@ -61,7 +58,7 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
                 ArrowPad(
                   padding: const EdgeInsets.all(8.0),
                   height: height / 5,
-                  width: width / 5,
+                  width: width / 4,
                   iconColor: Colors.white,
                   innerColor: Colors.red,
                   outerColor: const Color(0xFFCC0000),
@@ -97,7 +94,7 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
                 ArrowPad(
                   padding: const EdgeInsets.all(8.0),
                   height: height / 5,
-                  width: width / 5,
+                  width: width / 4,
                   arrowPadIconStyle: ArrowPadIconStyle.arrow,
                   hoverColor: Colors.green,
                   iconColor: const Color(0xFF631739),
@@ -111,7 +108,7 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
               children: [
                 ArrowPad(
                   height: height / 7,
-                  width: width / 7,
+                  width: width / 6,
                   innerColor: Colors.blue,
                   arrowPadIconStyle: ArrowPadIconStyle.arrow,
                 ),

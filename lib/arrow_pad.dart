@@ -23,13 +23,23 @@ enum ArrowPadIconStyle {
 class ArrowPad extends StatelessWidget {
   /// creates a rounded widget with 4 arrow keys
   ///
-  /// required [height] and [width] determines the size of the widget.
-  /// Better to use it with min size of 55.0
+  /// - The widget uses parent's size if
+  /// [height] and [width] are not specified
+  /// - If [height] and [width] are mentioned,
+  /// widget takes the user defined values
+  /// - If parent's size is available and also user mentioned size,
+  /// then the least of the two is taken
+  /// - If the parent doesn't have a size, and user haven't mentioned the size,
+  /// it takes a value of [height] = 90 and [width] = 90 as default
+  ///
+  /// Note: It is better to use it with min size of 55.0
   ///
   /// use [onPressedUp], [onPressedLeft], [onPressedRight], [onPressedDown]
   /// to declare functions on pressed arrows
   ///
   /// [ArrowPadIconStyle] determines the style of the arrow keys
+  ///
+  /// default padding will be `const EdgeInsets.all(8.0)` unless mentioned
   ///
   /// There are different customization options available like [innerColor],
   /// [outerColor], etc.
@@ -48,8 +58,8 @@ class ArrowPad extends StatelessWidget {
   /// ```
   const ArrowPad({
     Key? key,
-    required this.height,
-    required this.width,
+    this.height,
+    this.width,
     this.onPressedUp,
     this.onPressedDown,
     this.onPressedLeft,
@@ -63,8 +73,8 @@ class ArrowPad extends StatelessWidget {
     this.padding,
   }) : super(key: key);
 
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final void Function()? onPressedUp;
   final void Function()? onPressedDown;
   final void Function()? onPressedRight;
@@ -79,106 +89,124 @@ class ArrowPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _padSize = min(height, width);
-
     List<IconData> _icons = _getIconsFromIconStyle(arrowPadIconStyle);
 
     return Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: Container(
-        height: height,
-        width: width,
-        color: Colors.transparent,
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: outerColor,
-              shape: BoxShape.circle,
-            ),
-            height: _padSize,
-            width: _padSize,
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Center(
-                child: Material(
-                  color: Colors.transparent,
-                  child: Card(
-                    color: innerColor,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(_padSize),
-                    ),
-                    child: InkWell(
-                      splashColor: splashColor,
-                      hoverColor: hoverColor,
-                      borderRadius: BorderRadius.circular(_padSize - 10),
-                      onTap: () {},
-                      onTapDown: (details) {
-                        double x = details.localPosition.dx;
-                        double y = details.localPosition.dy;
-                        double part = (_padSize - 20) / 3;
-                        if (x > part && x < part * 2) {
-                          // up or down
-                          if (y < part) {
-                            if (onPressedUp != null) {
-                              onPressedUp!();
+      padding: padding ?? const EdgeInsets.all(8.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double _height = constraints.maxHeight;
+          double _width = constraints.maxWidth;
+
+          if (height != null && height! <= _height) {
+            _height = height!;
+          } else if (_height == double.infinity) {
+            _height = 90.0;
+          }
+          if (width != null && width! <= _width) {
+            _width = width!;
+          } else if (_width == double.infinity) {
+            _width = 90.0;
+          }
+
+          double _padSize = min(_height, _width);
+
+          return Container(
+            height: _height,
+            width: _width,
+            color: Colors.transparent,
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: outerColor,
+                  shape: BoxShape.circle,
+                ),
+                height: _padSize,
+                width: _padSize,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Center(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Card(
+                        color: innerColor,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(_padSize),
+                        ),
+                        child: InkWell(
+                          splashColor: splashColor,
+                          hoverColor: hoverColor,
+                          borderRadius: BorderRadius.circular(_padSize - 10),
+                          onTap: () {},
+                          onTapDown: (details) {
+                            double x = details.localPosition.dx;
+                            double y = details.localPosition.dy;
+                            double part = (_padSize - 20) / 3;
+                            if (x > part && x < part * 2) {
+                              // up or down
+                              if (y < part) {
+                                if (onPressedUp != null) {
+                                  onPressedUp!();
+                                }
+                              } else if (y > part * 2) {
+                                if (onPressedDown != null) {
+                                  onPressedDown!();
+                                }
+                              }
+                            } else if (y > part && y < part * 2) {
+                              // left or right
+                              if (x < part) {
+                                if (onPressedLeft != null) {
+                                  onPressedLeft!();
+                                }
+                              } else if (x > part * 2) {
+                                if (onPressedRight != null) {
+                                  onPressedRight!();
+                                }
+                              }
                             }
-                          } else if (y > part * 2) {
-                            if (onPressedDown != null) {
-                              onPressedDown!();
-                            }
-                          }
-                        } else if (y > part && y < part * 2) {
-                          // left or right
-                          if (x < part) {
-                            if (onPressedLeft != null) {
-                              onPressedLeft!();
-                            }
-                          } else if (x > part * 2) {
-                            if (onPressedRight != null) {
-                              onPressedRight!();
-                            }
-                          }
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              _icons[0],
-                              size: _padSize / 5,
-                              color: iconColor,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(
-                                    _icons[1],
-                                    size: _padSize / 5,
-                                    color: iconColor,
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  _icons[0],
+                                  size: _padSize / 5,
+                                  color: iconColor,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        _icons[1],
+                                        size: _padSize / 5,
+                                        color: iconColor,
+                                      ),
+                                      Icon(
+                                        _icons[2],
+                                        size: _padSize / 5,
+                                        color: iconColor,
+                                      ),
+                                    ],
                                   ),
-                                  Icon(
-                                    _icons[2],
-                                    size: _padSize / 5,
-                                    color: iconColor,
-                                  ),
-                                ],
-                              ),
+                                ),
+                                Icon(
+                                  _icons[3],
+                                  size: _padSize / 5,
+                                  color: iconColor,
+                                ),
+                              ],
                             ),
-                            Icon(
-                              _icons[3],
-                              size: _padSize / 5,
-                              color: iconColor,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -186,8 +214,8 @@ class ArrowPad extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
