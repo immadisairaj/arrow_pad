@@ -52,6 +52,10 @@ ArrowPad(
 
 You can find more usage details in the [`/example`](https://github.com/immadisairaj/arrow_pad/tree/main/example).
 
+## Dependency
+
+This package uses [`cupertino_icons`](https://pub.dev/packages/cupertino_icons) for the default arrow icon style.
+
 ## Additional information
 
 <!-- TODO: Tell users more about the package: where to find more information, how to 

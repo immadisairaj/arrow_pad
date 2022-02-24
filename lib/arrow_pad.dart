@@ -1,3 +1,4 @@
+/// A circular pad with 4 arrows which has a functionality of 4 buttons.
 library arrow_pad;
 
 import 'dart:math';

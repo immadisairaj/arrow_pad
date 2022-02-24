@@ -1,3 +1,7 @@
+## 0.1.3
+- fix dependency issue
+- update documentation
+
 ## 0.1.2
 - update documentation
 
