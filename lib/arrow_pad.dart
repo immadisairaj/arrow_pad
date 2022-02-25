@@ -142,10 +142,9 @@ class ArrowPad extends StatelessWidget {
 
           double _padSize = min(_height, _width);
 
-          return Container(
+          return SizedBox(
             height: _height,
             width: _width,
-            color: Colors.transparent,
             child: Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -155,7 +154,7 @@ class ArrowPad extends StatelessWidget {
                 height: _padSize,
                 width: _padSize,
                 child: Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: EdgeInsets.all(_padSize * 0.035),
                   child: Center(
                     child: Material(
                       color: Colors.transparent,
