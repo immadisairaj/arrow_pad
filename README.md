@@ -11,6 +11,7 @@ The package can be used in any plaform. It is platform independent.
 
 - Customize the widget using your own styles
 - Different icon styles
+- Click trigger on tap down or tap up
 
 ## Setup
 
@@ -34,7 +35,7 @@ const ArrowPad(),
 ```
 ![Screenshot 1](https://user-images.githubusercontent.com/40348358/155262898-14c293dd-c39d-4772-adad-4a221a3a67d7.png)
 
-The Arrow Pad can be customized with colors and icon styles.
+The Arrow Pad can be customized with colors, icon styles and click trigger.
 ```dart
 // custom usage
 ArrowPad(
@@ -42,6 +43,7 @@ ArrowPad(
     width: 80.0,
     innerColor: Colors.blue,
     arrowPadIconStyle: ArrowPadIconStyle.arrow,
+    clickTrigger: ClickTrigger.onTapDown,
     onPressedUp: () => print('up'),
     onPressedLeft: () => print('left'),
     onPressedRight: () => print('right'),
@@ -58,21 +60,4 @@ This package uses [`cupertino_icons`](https://pub.dev/packages/cupertino_icons) 
 
 ## Additional information
 
-<!-- TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more. -->
-
 This package is licensed under [BSD 3-Clause License](https://github.com/immadisairaj/arrow_pad/blob/main/LICENSE)
-
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->

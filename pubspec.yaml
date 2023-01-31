@@ -1,18 +1,19 @@
 name: arrow_pad
 description: A circular pad with 4 arrows which has a functionality of 4 buttons.
-version: 0.1.4
+version: 0.1.5
 # homepage: https://github.com/immadisairaj/arrow_pad
 repository: https://github.com/immadisairaj/arrow_pad
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.4
+  cupertino_icons: ^1.0.5
 
 dev_dependencies:
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
 

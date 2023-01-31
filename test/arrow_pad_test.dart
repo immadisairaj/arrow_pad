@@ -6,7 +6,7 @@ void main() {
   group('arrow pad layout', () {
     testWidgets('arrow pad widget', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ArrowPad(),
           ),
@@ -18,7 +18,7 @@ void main() {
     testWidgets('arrow pad size with default padding',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ArrowPad(
               height: 60,
@@ -29,12 +29,12 @@ void main() {
       );
       final widgetSize = tester.getSize(find.byType(ArrowPad));
       // check for the size with default padding
-      expect(widgetSize, equals(Size(76, 76)));
+      expect(widgetSize, equals(const Size(76, 76)));
     });
     testWidgets('arrow pad size with zero padding',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ArrowPad(
               height: 60,
@@ -46,12 +46,12 @@ void main() {
       );
       final widgetSize = tester.getSize(find.byType(ArrowPad));
       // check if the size is correct without padding
-      expect(widgetSize, equals(Size(60, 60)));
+      expect(widgetSize, equals(const Size(60, 60)));
     });
     testWidgets('arrow pad size inside sized box square',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: SizedBox(
               height: 60,
@@ -65,12 +65,12 @@ void main() {
       );
       final widgetSize = tester.getSize(find.byType(ArrowPad));
       // check if the widget takes parent size which is square
-      expect(widgetSize, equals(Size(60, 60)));
+      expect(widgetSize, equals(const Size(60, 60)));
     });
     testWidgets('arrow pad size inside sized box rectangle',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: SizedBox(
               height: 60,
@@ -84,11 +84,11 @@ void main() {
       );
       final widgetSize = tester.getSize(find.byType(ArrowPad));
       // check if the widget takes parent size which is rectangle
-      expect(widgetSize, equals(Size(80, 60)));
+      expect(widgetSize, equals(const Size(80, 60)));
     });
     testWidgets('arrow pad default size', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ArrowPad(),
           ),
