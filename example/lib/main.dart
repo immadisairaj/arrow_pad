@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Arrow Pad Example',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorSchemeSeed: Colors.brown,
       ),
       home: const ArrowPadExample(),
     );
@@ -25,7 +26,7 @@ class ArrowPadExample extends StatefulWidget {
   const ArrowPadExample({Key? key}) : super(key: key);
 
   @override
-  _ArrowPadExampleState createState() => _ArrowPadExampleState();
+  State<ArrowPadExample> createState() => _ArrowPadExampleState();
 }
 
 class _ArrowPadExampleState extends State<ArrowPadExample> {
@@ -47,9 +48,9 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   ArrowPad(),
                   Text('Default Arrow Pad'),
                 ],

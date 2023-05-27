@@ -15,31 +15,27 @@ enum ArrowPadIconStyle {
   /// and [Icons.arrow_downward]
   arrow;
 
-  /// returns list of icons based on [iconStyle]
-  /// [iconStyle] can be [ArrowPadIconStyle.chevron] or [ArrowPadIconStyle.arrow]
+  /// returns list of icons based on the current icon style
   ///
   /// position of the icons in the list is:
   /// - 0: up
   /// - 1: left
   /// - 2: right
   /// - 3: down
-  static List<IconData> getIcons(ArrowPadIconStyle iconStyle) {
-    switch (iconStyle) {
-      case ArrowPadIconStyle.arrow:
-        return [
+  List<IconData> getIcons() {
+    return switch (this) {
+      ArrowPadIconStyle.arrow => [
           Icons.arrow_upward,
           Icons.arrow_back,
           Icons.arrow_forward,
           Icons.arrow_downward,
-        ];
-      case ArrowPadIconStyle.chevron:
-      default:
-        return [
+        ],
+      ArrowPadIconStyle.chevron || _ => [
           CupertinoIcons.chevron_up,
           CupertinoIcons.chevron_left,
           CupertinoIcons.chevron_right,
           CupertinoIcons.chevron_down,
-        ];
-    }
+        ],
+    };
   }
 }

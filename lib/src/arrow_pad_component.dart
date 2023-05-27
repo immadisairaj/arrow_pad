@@ -56,7 +56,7 @@ class ArrowPad extends StatelessWidget {
     this.onPressedRight,
     this.clickTrigger = ClickTrigger.onTapDown,
     this.arrowPadIconStyle = ArrowPadIconStyle.chevron,
-    this.outerColor = const Color(0xFFE0E0E0),
+    this.outerColor,
     this.innerColor,
     this.iconColor,
     this.splashColor,
@@ -114,7 +114,15 @@ class ArrowPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<IconData> icons = ArrowPadIconStyle.getIcons(arrowPadIconStyle);
+    List<IconData> icons = arrowPadIconStyle.getIcons();
+
+    // TODO: document changes regarding colors. Update readme too
+    var lSplashColor = splashColor;
+    if (Theme.of(context).useMaterial3) {
+      // use dynamic color from primary when using material 3
+      lSplashColor =
+          splashColor ?? Theme.of(context).colorScheme.primary.withAlpha(80);
+    }
 
     return Padding(
       padding: padding ?? const EdgeInsets.all(8.0),
@@ -142,7 +150,8 @@ class ArrowPad extends StatelessWidget {
             child: Center(
               child: Container(
                 decoration: BoxDecoration(
-                  color: outerColor,
+                  color: outerColor ??
+                      Theme.of(context).colorScheme.primary.withAlpha(80),
                   shape: BoxShape.circle,
                 ),
                 height: padSize,
@@ -153,13 +162,14 @@ class ArrowPad extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: Card(
-                        color: innerColor,
+                        color: innerColor ??
+                            Theme.of(context).colorScheme.primaryContainer,
                         elevation: 5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(padSize),
                         ),
                         child: InkWell(
-                          splashColor: splashColor,
+                          splashColor: lSplashColor,
                           hoverColor: hoverColor,
                           borderRadius: BorderRadius.circular(padSize - 10),
                           onTap: () {},
@@ -173,42 +183,36 @@ class ArrowPad extends StatelessWidget {
                                   : null,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(
-                                  icons[0],
-                                  size: padSize / 5,
-                                  color: iconColor,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(
-                                        icons[1],
-                                        size: padSize / 5,
-                                        color: iconColor,
-                                      ),
-                                      Icon(
-                                        icons[2],
-                                        size: padSize / 5,
-                                        color: iconColor,
-                                      ),
-                                    ],
+                            child: IconTheme(
+                              data: IconThemeData(
+                                size: padSize / 5,
+                                color: iconColor ??
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Icon(icons[0]),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Icon(icons[1]),
+                                        Icon(icons[2]),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  icons[3],
-                                  size: padSize / 5,
-                                  color: iconColor,
-                                ),
-                              ],
+                                  Icon(icons[3]),
+                                ],
+                              ),
                             ),
                           ),
                         ),
