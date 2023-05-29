@@ -19,7 +19,7 @@ There is no special setup required, just add the dependency in `pubspec.yaml`, i
 
 Add the dependency in `pubspec.yaml`
 ```yaml
-arrow_pad: ^0.1.2 # Note: use latest version
+arrow_pad: ^0.2.0 # Note: use latest version
 ```
 
 Import the widget into dart file

@@ -30,8 +30,9 @@ class ArrowPad extends StatelessWidget {
   ///
   /// default padding will be `const EdgeInsets.all(8.0)` unless mentioned
   ///
-  /// There are different customization options available like [innerColor],
-  /// [outerColor], etc.
+  /// By default, the theming of the arrow pad will be taken from the
+  /// [ThemeData] of ancestors (if available). There are also different
+  /// customization options  available like [innerColor], [outerColor], etc.
   ///
   /// Example usage:
   /// ```dart
@@ -93,8 +94,6 @@ class ArrowPad extends StatelessWidget {
   final ArrowPadIconStyle arrowPadIconStyle;
 
   /// outer circle color of the arrow pad
-  ///
-  /// Defaults to `Color(0xFFE0E0E0)`
   final Color? outerColor;
 
   /// inner circle color of the arrow pad
@@ -114,9 +113,8 @@ class ArrowPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<IconData> icons = arrowPadIconStyle.getIcons();
+    final icons = arrowPadIconStyle.getIcons();
 
-    // TODO: document changes regarding colors. Update readme too
     var lSplashColor = splashColor;
     if (Theme.of(context).useMaterial3) {
       // use dynamic color from primary when using material 3

@@ -4,6 +4,10 @@ version: 0.1.5
 # homepage: https://github.com/immadisairaj/arrow_pad
 repository: https://github.com/immadisairaj/arrow_pad
 
+screenshots:
+  - description: 'Default Arrow Pad'
+    path: example/screenshots/arrow_pad.png
+
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
