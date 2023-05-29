@@ -2,8 +2,7 @@ An arrow pad which resembles the mp3 player button style. But instead, there are
 
 ![Arrow Pad Demo](https://user-images.githubusercontent.com/40348358/155262478-bf5d0f1a-6a4c-4233-9f58-032d5bcd2643.gif)
 
-![Screenshot 1](https://user-images.githubusercontent.com/40348358/155262898-14c293dd-c39d-4772-adad-4a221a3a67d7.png)
-![Screenshot 2](https://user-images.githubusercontent.com/40348358/155262967-e44897a3-0f14-4493-978a-8cba68180d31.png)
+<img alt="Screenshot 1" src="https://github.com/immadisairaj/arrow_pad/assets/40348358/27208d5f-0c71-4d6d-8457-6108b493422d"> <img alt="Screenshot 2" src="https://user-images.githubusercontent.com/40348358/155262967-e44897a3-0f14-4493-978a-8cba68180d31.png">
 
 ## Features
 
@@ -33,7 +32,7 @@ The default usage of the arrow pad:
 // default usage
 const ArrowPad(),
 ```
-![Screenshot 1](https://user-images.githubusercontent.com/40348358/155262898-14c293dd-c39d-4772-adad-4a221a3a67d7.png)
+<img alt="Screenshot 1" src="https://github.com/immadisairaj/arrow_pad/assets/40348358/27208d5f-0c71-4d6d-8457-6108b493422d">
 
 The Arrow Pad can be customized with colors, icon styles and click trigger.
 ```dart
