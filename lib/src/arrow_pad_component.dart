@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'arrow_pad_icon_style.dart';
 import 'click_trigger.dart';
+import 'press_direction.dart';
 
 /// the arrow pad widget
 class ArrowPad extends StatelessWidget {
@@ -20,15 +21,14 @@ class ArrowPad extends StatelessWidget {
   ///
   /// Note: It is better to use it with min size of 55.0
   ///
-  /// use [onPressedUp], [onPressedLeft], [onPressedRight], [onPressedDown]
-  /// to declare functions on pressed arrows
+  /// Use [onPressed] to declare functions on pressed arrows
   ///
-  /// use [clickTrigger] to declare when to trigger the pressed functions.
+  /// Use [clickTrigger] to declare when to trigger the pressed functions.
   /// Either on [ClickTrigger.onTapDown] or [ClickTrigger.onTapUp]
   ///
   /// [ArrowPadIconStyle] determines the style of the arrow keys
   ///
-  /// default padding will be `const EdgeInsets.all(8.0)` unless mentioned
+  /// Default padding will be `const EdgeInsets.all(8.0)` unless mentioned
   ///
   /// By default, the theming of the arrow pad will be taken from the
   /// [ThemeData] of ancestors (if available). There are also different
@@ -41,10 +41,7 @@ class ArrowPad extends StatelessWidget {
   ///   width: 70,
   ///   arrowPadIconStyle = ArrowPadIconStyle.arrow,
   ///   clickTrigger: ClickTrigger.onTapUp,
-  ///   onPressedUp: () => print('up'),
-  ///   onPressedLeft: () => print('left'),
-  ///   onPressedRight: () => print('right'),
-  ///   onPressedDown: () => print('down'),
+  ///   onPressed: (direction) => print('Pressed $direction'),
   /// ),
   /// ```
   const ArrowPad({
@@ -55,6 +52,7 @@ class ArrowPad extends StatelessWidget {
     this.onPressedDown,
     this.onPressedLeft,
     this.onPressedRight,
+    this.onPressed,
     this.clickTrigger = ClickTrigger.onTapDown,
     this.arrowPadIconStyle = ArrowPadIconStyle.chevron,
     this.outerColor,
@@ -63,7 +61,14 @@ class ArrowPad extends StatelessWidget {
     this.splashColor,
     this.hoverColor,
     this.padding,
-  }) : super(key: key);
+  })  : assert(
+            !(onPressed != null &&
+                (onPressedDown != null ||
+                    onPressedUp != null ||
+                    onPressedRight != null ||
+                    onPressedLeft != null)),
+            'Either use [onPressed] or the old 4 methods.'),
+        super(key: key);
 
   /// height of the arrow pad
   final double? height;
@@ -72,16 +77,23 @@ class ArrowPad extends StatelessWidget {
   final double? width;
 
   /// function when up arrow is pressed
+  @Deprecated('Use [onPressed] instead')
   final void Function()? onPressedUp;
 
   /// function when down arrow is pressed
+  @Deprecated('Use [onPressed] instead')
   final void Function()? onPressedDown;
 
   /// function when right arrow is pressed
+  @Deprecated('Use [onPressed] instead')
   final void Function()? onPressedRight;
 
   /// function when left arrow is pressed
+  @Deprecated('Use [onPressed] instead')
   final void Function()? onPressedLeft;
+
+  /// function when pressed any button
+  final void Function(PressDirection direction)? onPressed;
 
   /// When to trigger the pressed functions using [ClickTrigger]
   ///
@@ -237,10 +249,16 @@ class ArrowPad extends StatelessWidget {
     if (x > part && x < part * 2) {
       // up or down
       if (y < part) {
+        if (onPressed != null) {
+          onPressed!(PressDirection.up);
+        }
         if (onPressedUp != null) {
           onPressedUp!();
         }
       } else if (y > part * 2) {
+        if (onPressed != null) {
+          onPressed!(PressDirection.down);
+        }
         if (onPressedDown != null) {
           onPressedDown!();
         }
@@ -248,10 +266,16 @@ class ArrowPad extends StatelessWidget {
     } else if (y > part && y < part * 2) {
       // left or right
       if (x < part) {
+        if (onPressed != null) {
+          onPressed!(PressDirection.left);
+        }
         if (onPressedLeft != null) {
           onPressedLeft!();
         }
       } else if (x > part * 2) {
+        if (onPressed != null) {
+          onPressed!(PressDirection.right);
+        }
         if (onPressedRight != null) {
           onPressedRight!();
         }

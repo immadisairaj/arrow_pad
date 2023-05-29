@@ -110,10 +110,14 @@ void main() {
             body: ArrowPad(
               height: 100,
               width: 100,
-              onPressedUp: () => pressedValue = 1,
-              onPressedDown: () => pressedValue = 2,
-              onPressedLeft: () => pressedValue = 3,
-              onPressedRight: () => pressedValue = 4,
+              onPressed: (direction) {
+                pressedValue = switch (direction) {
+                  PressDirection.up => 1,
+                  PressDirection.down => 2,
+                  PressDirection.left => 3,
+                  PressDirection.right => 4,
+                };
+              },
             ),
           ),
         ),

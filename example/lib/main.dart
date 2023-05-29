@@ -67,25 +67,14 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
                     outerColor: const Color(0xFFCC0000),
                     splashColor: const Color(0xFFCC0000),
                     hoverColor: const Color(0xFFFF4D4D),
-                    onPressedUp: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Up Pressed (tapDown)';
-                      });
-                    },
-                    onPressedDown: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Down Pressed (tapDown)';
-                      });
-                    },
-                    onPressedLeft: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Left Pressed (tapDown)';
-                      });
-                    },
-                    onPressedRight: () {
-                      setState(() {
-                        _secondArrowPadValue = 'Right Pressed (tapDown)';
-                      });
+                    onPressed: (direction) {
+                      _secondArrowPadValue = switch (direction) {
+                        PressDirection.up => 'Up Pressed (tapDown)',
+                        PressDirection.right => 'Right Pressed (tapDown)',
+                        PressDirection.down => 'Down Pressed (tapDown)',
+                        PressDirection.left => 'Left Pressed (tapDown)',
+                      };
+                      setState(() {});
                     },
                   ),
                   Text(_secondArrowPadValue),
@@ -104,25 +93,14 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
                     splashColor: const Color(0xFFCC0000),
                     hoverColor: const Color(0xFFFF4D4D),
                     clickTrigger: ClickTrigger.onTapUp,
-                    onPressedUp: () {
-                      setState(() {
-                        _thirdArrowPadValue = 'Up Pressed (tapUp)';
-                      });
-                    },
-                    onPressedDown: () {
-                      setState(() {
-                        _thirdArrowPadValue = 'Down Pressed (tapUp)';
-                      });
-                    },
-                    onPressedLeft: () {
-                      setState(() {
-                        _thirdArrowPadValue = 'Left Pressed (tapUp)';
-                      });
-                    },
-                    onPressedRight: () {
-                      setState(() {
-                        _thirdArrowPadValue = 'Right Pressed (tapUp)';
-                      });
+                    onPressed: (direction) {
+                      _thirdArrowPadValue = switch (direction) {
+                        PressDirection.up => 'Up Pressed (tapUp)',
+                        PressDirection.right => 'Right Pressed (tapUp)',
+                        PressDirection.down => 'Down Pressed (tapUp)',
+                        PressDirection.left => 'Left Pressed (tapUp)',
+                      };
+                      setState(() {});
                     },
                   ),
                   Text(_thirdArrowPadValue),

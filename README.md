@@ -12,6 +12,28 @@ The package can be used in any plaform. It is platform independent.
 - Different icon styles
 - Click trigger on tap down or tap up
 
+# Arrow Pad Playground
+
+To vew different features/functionalities, you can view [Arrow Pad Playground](https://immadisairaj.dev/arrow_pad). Or, you can use the [Zapp](https://zapp.run/pub/arrow_pad) to play around with the example of this package.
+
+## Migrations (from 0.1.5 to 0.2.0)
+
+Deprecated `onPressedUp`, `onPressedRight`, `onPressedDown` and `onPressedLeft` is replaced with `onPressed`.
+
+```dart
+// Before
+ArrowPad(
+    onPressedUp: () => print('up'),
+    onPressedLeft: () => print('left'),
+    onPressedRight: () => print('right'),
+    onPressedDown: () => print('down'),
+),
+// After
+ArrowPad(
+    onPressed: (direction) => print(direction),
+),
+```
+
 ## Setup
 
 There is no special setup required, just add the dependency in `pubspec.yaml`, import the file, and you are good to go..
@@ -43,10 +65,7 @@ ArrowPad(
     innerColor: Colors.blue,
     arrowPadIconStyle: ArrowPadIconStyle.arrow,
     clickTrigger: ClickTrigger.onTapDown,
-    onPressedUp: () => print('up'),
-    onPressedLeft: () => print('left'),
-    onPressedRight: () => print('right'),
-    onPressedDown: () => print('down'),
+    onPressed: (direction) => print('Pressed $direction'),
 ),
 ```
 ![Screenshot 3](https://user-images.githubusercontent.com/40348358/155263058-8b760258-b7a4-4bc0-976e-b4d02f7b0120.png)
