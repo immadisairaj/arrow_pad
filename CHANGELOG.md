@@ -1,3 +1,9 @@
+## 0.2.0
+- Deprecate onPressedUp, onPressedRight, onPressedDown, onPressedLeft
+- Instead use onPressed
+- Now supports dynamic colors based on ThemeData
+- Updates to Flutter 3.10
+
 ## 0.1.5
 - add option to trigger the pressed functions on tap down or tap up (clickTrigger)
 - refactor the code
