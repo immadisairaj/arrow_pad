@@ -12,9 +12,9 @@ The package can be used in any plaform. It is platform independent.
 - Different icon styles
 - Click trigger on tap down or tap up
 
-# Arrow Pad Playground
+## Arrow Pad Playground
 
-To vew different features/functionalities, you can view [Arrow Pad Playground](https://immadisairaj.dev/arrow_pad). Or, you can use the [Zapp](https://zapp.run/pub/arrow_pad) to play around with the example of this package.
+To vew different features/functionalities, you can view [Arrow Pad Playground](https://arrowpad.immadisairaj.dev). Or, you can use the [Zapp](https://zapp.run/pub/arrow_pad) to play around with the example of this package.
 
 ## Migrations (from 0.1.5 to 0.2.0)
 
