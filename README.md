@@ -11,10 +11,26 @@ The package can be used in any plaform. It is platform independent.
 - Customize the widget using your own styles
 - Different icon styles
 - Click trigger on tap down or tap up
+- Hold support with `onPressStart` / `onPressEnd`
 
 ## Arrow Pad Playground
 
 To vew different features/functionalities, you can view [Arrow Pad Playground](https://arrowpad.immadisairaj.dev). Or, you can use the [Zapp](https://zapp.run/pub/arrow_pad) to play around with the example of this package.
+
+## Migrating to 1.0.0 (Flutter 3.47+)
+
+Flutter 3.47 moved Material and Cupertino into the standalone
+[`material_ui`](https://pub.dev/packages/material_ui) and
+[`cupertino_ui`](https://pub.dev/packages/cupertino_ui) packages. Version 1.0.0
+of this package uses them, so your app must too:
+
+```bash
+flutter pub add material_ui cupertino_ui
+dart fix --apply --code=migrate_design_widgets
+```
+
+If some of your other dependencies are not migrated yet, wrap your app with
+`MaterialUiCompatibilityBridge`. On older Flutter versions use `arrow_pad: ^0.2.0`.
 
 ## Migrations (from 0.1.5 to 0.2.0)
 
@@ -40,7 +56,7 @@ There is no special setup required, just add the dependency in `pubspec.yaml`, i
 
 Add the dependency in `pubspec.yaml`
 ```yaml
-arrow_pad: ^0.2.0 # Note: use latest version
+arrow_pad: ^1.0.0 # Note: use latest version
 ```
 
 Import the widget into dart file
@@ -70,11 +86,19 @@ ArrowPad(
 ```
 ![Screenshot 3](https://user-images.githubusercontent.com/40348358/155263058-8b760258-b7a4-4bc0-976e-b4d02f7b0120.png)
 
+To react while an arrow is held (for example to keep a character moving), use `onPressStart` and `onPressEnd`. Every start is followed by exactly one end for the same direction, even if the gesture is cancelled.
+```dart
+ArrowPad(
+    onPressStart: (direction) => player.startMoving(direction),
+    onPressEnd: (direction) => player.stopMoving(direction),
+),
+```
+
 You can find more usage details in the [`/example`](https://github.com/immadisairaj/arrow_pad/tree/main/example).
 
 ## Dependency
 
-This package uses [`cupertino_icons`](https://pub.dev/packages/cupertino_icons) for the default arrow icon style.
+This package uses [`material_ui`](https://pub.dev/packages/material_ui), [`cupertino_ui`](https://pub.dev/packages/cupertino_ui) and [`cupertino_icons`](https://pub.dev/packages/cupertino_icons) for the pad and the default arrow icon style.
 
 ## Additional information
 

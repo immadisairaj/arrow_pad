@@ -1,5 +1,5 @@
 import 'package:arrow_pad/arrow_pad.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -140,6 +140,80 @@ void main() {
       await tester
           .tapAt(Offset(3 * widgetSize.width / 4, widgetSize.height / 2));
       expect(pressedValue, 4);
+    });
+  });
+
+  group('arrow pad hold', () {
+    Future<Size> pump(
+      WidgetTester tester, {
+      required List<String> log,
+      ClickTrigger trigger = ClickTrigger.onTapDown,
+    }) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ArrowPad(
+              height: 100,
+              width: 100,
+              clickTrigger: trigger,
+              onPressed: (d) => log.add('pressed $d'),
+              onPressStart: (d) => log.add('start $d'),
+              onPressEnd: (d) => log.add('end $d'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return tester.getSize(find.byType(ArrowPad));
+    }
+
+    testWidgets('start and end pair around a held press',
+        (WidgetTester tester) async {
+      final log = <String>[];
+      final size = await pump(tester, log: log);
+      final gesture = await tester
+          .startGesture(Offset(3 * size.width / 4, size.height / 2));
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(log, ['start right', 'pressed right']);
+      await gesture.up();
+      await tester.pump();
+      expect(log, ['start right', 'pressed right', 'end right']);
+    });
+
+    testWidgets('end is called when the gesture is cancelled',
+        (WidgetTester tester) async {
+      final log = <String>[];
+      final size = await pump(tester, log: log);
+      final gesture =
+          await tester.startGesture(Offset(size.width / 2, size.height / 4));
+      await tester.pump(const Duration(milliseconds: 50));
+      await gesture.cancel();
+      await tester.pump();
+      expect(log, ['start up', 'pressed up', 'end up']);
+    });
+
+    testWidgets('onTapUp trigger still starts on down and presses on up',
+        (WidgetTester tester) async {
+      final log = <String>[];
+      final size = await pump(tester, log: log, trigger: ClickTrigger.onTapUp);
+      final gesture = await tester
+          .startGesture(Offset(size.width / 4, size.height / 2));
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(log, ['start left']);
+      await gesture.up();
+      await tester.pump();
+      expect(log, ['start left', 'end left', 'pressed left']);
+    });
+
+    testWidgets('touching the centre fires nothing',
+        (WidgetTester tester) async {
+      final log = <String>[];
+      final size = await pump(tester, log: log);
+      final gesture = await tester
+          .startGesture(Offset(size.width / 2, size.height / 2));
+      await gesture.up();
+      await tester.pump();
+      expect(log, isEmpty);
     });
   });
 }

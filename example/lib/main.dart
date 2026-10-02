@@ -1,12 +1,12 @@
 import 'package:arrow_pad/arrow_pad.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
 }
 
 class ArrowPadExample extends StatefulWidget {
-  const ArrowPadExample({Key? key}) : super(key: key);
+  const ArrowPadExample({super.key});
 
   @override
   State<ArrowPadExample> createState() => _ArrowPadExampleState();
@@ -32,6 +32,9 @@ class ArrowPadExample extends StatefulWidget {
 class _ArrowPadExampleState extends State<ArrowPadExample> {
   String _secondArrowPadValue = 'With Functions (tapDown)';
   String _thirdArrowPadValue = 'With Functions (tapUp)';
+  String _holdValue = 'Hold an arrow';
+  int _holdMillis = 0;
+  DateTime? _holdStart;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +107,27 @@ class _ArrowPadExampleState extends State<ArrowPadExample> {
                     },
                   ),
                   Text(_thirdArrowPadValue),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ArrowPad(
+                    padding: const EdgeInsets.all(8.0),
+                    height: height / 5,
+                    width: width / 4,
+                    onPressStart: (direction) => setState(() {
+                      _holdStart = DateTime.now();
+                      _holdValue = 'Holding $direction';
+                    }),
+                    onPressEnd: (direction) => setState(() {
+                      _holdMillis = DateTime.now()
+                          .difference(_holdStart ?? DateTime.now())
+                          .inMilliseconds;
+                      _holdValue = 'Released $direction after $_holdMillis ms';
+                    }),
+                  ),
+                  Flexible(child: Text(_holdValue)),
                 ],
               ),
               Row(

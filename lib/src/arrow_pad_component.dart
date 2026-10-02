@@ -2,14 +2,14 @@
 
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'arrow_pad_icon_style.dart';
 import 'click_trigger.dart';
 import 'press_direction.dart';
 
 /// the arrow pad widget
-class ArrowPad extends StatelessWidget {
+class ArrowPad extends StatefulWidget {
   /// creates a rounded widget with 4 arrow keys
   ///
   /// - The widget uses parent's size if
@@ -24,6 +24,10 @@ class ArrowPad extends StatelessWidget {
   /// Note: It is better to use it with min size of 55.0
   ///
   /// Use [onPressed] to declare functions on pressed arrows
+  ///
+  /// Use [onPressStart] and [onPressEnd] to react to a press being held, e.g.
+  /// to move something while an arrow is down and stop when it is released.
+  /// They are independent of [clickTrigger] and [onPressed].
   ///
   /// Use [clickTrigger] to declare when to trigger the pressed functions.
   /// Either on [ClickTrigger.onTapDown] or [ClickTrigger.onTapUp]
@@ -47,7 +51,7 @@ class ArrowPad extends StatelessWidget {
   /// ),
   /// ```
   const ArrowPad({
-    Key? key,
+    super.key,
     this.height,
     this.width,
     this.onPressedUp,
@@ -55,6 +59,8 @@ class ArrowPad extends StatelessWidget {
     this.onPressedLeft,
     this.onPressedRight,
     this.onPressed,
+    this.onPressStart,
+    this.onPressEnd,
     this.clickTrigger = ClickTrigger.onTapDown,
     this.arrowPadIconStyle = ArrowPadIconStyle.chevron,
     this.outerColor,
@@ -63,14 +69,13 @@ class ArrowPad extends StatelessWidget {
     this.splashColor,
     this.hoverColor,
     this.padding,
-  })  : assert(
+  }) : assert(
             !(onPressed != null &&
                 (onPressedDown != null ||
                     onPressedUp != null ||
                     onPressedRight != null ||
                     onPressedLeft != null)),
-            'Either use [onPressed] or the old 4 methods.'),
-        super(key: key);
+            'Either use [onPressed] or the old 4 methods.');
 
   /// height of the arrow pad
   final double? height;
@@ -96,6 +101,17 @@ class ArrowPad extends StatelessWidget {
 
   /// function when pressed any button
   final void Function(PressDirection direction)? onPressed;
+
+  /// Called when an arrow is pressed down, with the pressed direction.
+  ///
+  /// Always fires on touch down, regardless of [clickTrigger]. Every call is
+  /// followed by exactly one [onPressEnd] call for the same direction.
+  final void Function(PressDirection direction)? onPressStart;
+
+  /// Called when the press that triggered [onPressStart] ends, either because
+  /// the finger was lifted or because the gesture was cancelled (for example
+  /// when a scrollable took over the pointer).
+  final void Function(PressDirection direction)? onPressEnd;
 
   /// When to trigger the pressed functions using [ClickTrigger]
   ///
@@ -126,30 +142,38 @@ class ArrowPad extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
 
   @override
-  Widget build(BuildContext context) {
-    final icons = arrowPadIconStyle.getIcons();
+  State<ArrowPad> createState() => _ArrowPadState();
+}
 
-    var lSplashColor = splashColor;
+class _ArrowPadState extends State<ArrowPad> {
+  /// direction of the press currently held down (if any)
+  PressDirection? _held;
+
+  @override
+  Widget build(BuildContext context) {
+    final icons = widget.arrowPadIconStyle.getIcons();
+
+    var lSplashColor = widget.splashColor;
     if (Theme.of(context).useMaterial3) {
       // use dynamic color from primary when using material 3
-      lSplashColor =
-          splashColor ?? Theme.of(context).colorScheme.primary.withAlpha(80);
+      lSplashColor = widget.splashColor ??
+          Theme.of(context).colorScheme.primary.withAlpha(80);
     }
 
     return Padding(
-      padding: padding ?? const EdgeInsets.all(8.0),
+      padding: widget.padding ?? const EdgeInsets.all(8.0),
       child: LayoutBuilder(
         builder: (context, constraints) {
           double cHeight = constraints.maxHeight;
           double cWidth = constraints.maxWidth;
 
-          if (height != null && height! <= cHeight) {
-            cHeight = height!;
+          if (widget.height != null && widget.height! <= cHeight) {
+            cHeight = widget.height!;
           } else if (cHeight == double.infinity) {
             cHeight = 90.0;
           }
-          if (width != null && width! <= cWidth) {
-            cWidth = width!;
+          if (widget.width != null && widget.width! <= cWidth) {
+            cWidth = widget.width!;
           } else if (cWidth == double.infinity) {
             cWidth = 90.0;
           }
@@ -162,7 +186,7 @@ class ArrowPad extends StatelessWidget {
             child: Center(
               child: Container(
                 decoration: BoxDecoration(
-                  color: outerColor ??
+                  color: widget.outerColor ??
                       Theme.of(context).colorScheme.primary.withAlpha(80),
                   shape: BoxShape.circle,
                 ),
@@ -174,7 +198,7 @@ class ArrowPad extends StatelessWidget {
                     child: Material(
                       color: Colors.transparent,
                       child: Card(
-                        color: innerColor ??
+                        color: widget.innerColor ??
                             Theme.of(context).colorScheme.primaryContainer,
                         elevation: 5,
                         shape: RoundedRectangleBorder(
@@ -182,23 +206,36 @@ class ArrowPad extends StatelessWidget {
                         ),
                         child: InkWell(
                           splashColor: lSplashColor,
-                          hoverColor: hoverColor,
+                          hoverColor: widget.hoverColor,
                           borderRadius: BorderRadius.circular(padSize - 10),
                           onTap: () {},
-                          onTapUp: (details) =>
-                              clickTrigger == ClickTrigger.onTapUp
-                                  ? _tapHandle(details, padSize)
-                                  : null,
-                          onTapDown: (details) =>
-                              clickTrigger == ClickTrigger.onTapDown
-                                  ? _tapHandle(details, padSize)
-                                  : null,
+                          onTapDown: (details) {
+                            final direction =
+                                _directionAt(details.localPosition, padSize);
+                            _held = direction;
+                            if (direction != null) {
+                              widget.onPressStart?.call(direction);
+                              if (widget.clickTrigger ==
+                                  ClickTrigger.onTapDown) {
+                                _fire(direction);
+                              }
+                            }
+                          },
+                          onTapUp: (details) {
+                            _release();
+                            if (widget.clickTrigger == ClickTrigger.onTapUp) {
+                              final direction = _directionAt(
+                                  details.localPosition, padSize);
+                              if (direction != null) _fire(direction);
+                            }
+                          },
+                          onTapCancel: _release,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2),
                             child: IconTheme(
                               data: IconThemeData(
                                 size: padSize / 5,
-                                color: iconColor ??
+                                color: widget.iconColor ??
                                     Theme.of(context)
                                         .colorScheme
                                         .onPrimaryContainer,
@@ -240,48 +277,40 @@ class ArrowPad extends StatelessWidget {
     );
   }
 
-  /// handle the tap on the arrow pad.
-  ///
-  /// Can be used only on the [details] that contains localPosition.
-  /// Example: [TapDownDetails] or [TapUpDetails]
-  _tapHandle(details, double padSize) {
-    double x = details.localPosition.dx;
-    double y = details.localPosition.dy;
-    double part = (padSize - 20) / 3;
+  /// ends the held press (if any) and notifies [ArrowPad.onPressEnd].
+  void _release() {
+    final direction = _held;
+    _held = null;
+    if (direction != null) widget.onPressEnd?.call(direction);
+  }
+
+  /// returns the arrow under [position], or null for the corners / centre.
+  PressDirection? _directionAt(Offset position, double padSize) {
+    final x = position.dx;
+    final y = position.dy;
+    final part = (padSize - 20) / 3;
     if (x > part && x < part * 2) {
-      // up or down
-      if (y < part) {
-        if (onPressed != null) {
-          onPressed!(PressDirection.up);
-        }
-        if (onPressedUp != null) {
-          onPressedUp!();
-        }
-      } else if (y > part * 2) {
-        if (onPressed != null) {
-          onPressed!(PressDirection.down);
-        }
-        if (onPressedDown != null) {
-          onPressedDown!();
-        }
-      }
+      if (y < part) return PressDirection.up;
+      if (y > part * 2) return PressDirection.down;
     } else if (y > part && y < part * 2) {
-      // left or right
-      if (x < part) {
-        if (onPressed != null) {
-          onPressed!(PressDirection.left);
-        }
-        if (onPressedLeft != null) {
-          onPressedLeft!();
-        }
-      } else if (x > part * 2) {
-        if (onPressed != null) {
-          onPressed!(PressDirection.right);
-        }
-        if (onPressedRight != null) {
-          onPressedRight!();
-        }
-      }
+      if (x < part) return PressDirection.left;
+      if (x > part * 2) return PressDirection.right;
+    }
+    return null;
+  }
+
+  /// notifies [ArrowPad.onPressed] and the deprecated per-direction callbacks.
+  void _fire(PressDirection direction) {
+    widget.onPressed?.call(direction);
+    switch (direction) {
+      case PressDirection.up:
+        widget.onPressedUp?.call();
+      case PressDirection.right:
+        widget.onPressedRight?.call();
+      case PressDirection.down:
+        widget.onPressedDown?.call();
+      case PressDirection.left:
+        widget.onPressedLeft?.call();
     }
   }
 }
