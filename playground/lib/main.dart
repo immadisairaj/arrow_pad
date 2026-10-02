@@ -1,5 +1,5 @@
 import 'package:arrow_pad/arrow_pad.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -34,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late ClickTrigger clickTrigger;
   final String constString = 'Clicked';
   late String textToDisplay;
+  String holdText = 'Hold an arrow (onPressStart / onPressEnd)';
 
   @override
   void initState() {
@@ -72,6 +73,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: ArrowPad(
                     arrowPadIconStyle: arrowPadIconStyle,
                     clickTrigger: clickTrigger,
+                    onPressStart: (direction) =>
+                        setState(() => holdText = 'Holding $direction'),
+                    onPressEnd: (direction) =>
+                        setState(() => holdText = 'Released $direction'),
                     onPressed: (direction) => setState(
                       () => textToDisplay = '$constString $direction',
                     ),
@@ -81,9 +86,18 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Flexible(
               flex: 1,
-              child: Text(
-                textToDisplay,
-                style: Theme.of(context).textTheme.headlineLarge,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    textToDisplay,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  Text(
+                    holdText,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
               ),
             ),
             Flexible(
